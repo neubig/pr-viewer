@@ -1,11 +1,12 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Octokit } from '@octokit/rest';
 import Select from 'react-select';
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const octokit = new Octokit({ auth: import.meta.env.VITE_GITHUB_TOKEN });
 
 interface PullRequest {
   title: string;

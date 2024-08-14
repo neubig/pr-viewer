@@ -1,4 +1,5 @@
 
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -10,4 +11,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
   },
+  define: {
+    'process.env.GITHUB_TOKEN': JSON.stringify(process.env.GITHUB_TOKEN)
+  }
 })
