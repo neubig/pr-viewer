@@ -1,4 +1,3 @@
-
 # PR Viewer
 
 This React application allows you to view open pull requests from GitHub repositories in the OpenDevin organization.
@@ -26,3 +25,6 @@ To build the app for production, use: `npm run build`
 
 Make sure to replace `your_github_token_here` with an actual GitHub personal access token that has the necessary permissions to read repository and pull request information from the OpenDevin organization.
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
