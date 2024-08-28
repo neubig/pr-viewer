@@ -5,6 +5,17 @@
   text-align: center;
 }
 
+body {
+  background-color: #ffffff;
+  color: #213547;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #242424;
+  color: #ffffff;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +50,30 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dark-mode-toggle:hover {
+  background-color: #535bf2;
+}
+
+.dark-mode .dark-mode-toggle {
+  background-color: #ffffff;
+  color: #242424;
+}
+
+.dark-mode .dark-mode-toggle:hover {
+  background-color: #e6e6e6;
 }
