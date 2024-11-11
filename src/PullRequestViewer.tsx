@@ -2,7 +2,6 @@
 
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Octokit } from '@octokit/rest';
 import Select from 'react-select';
 
