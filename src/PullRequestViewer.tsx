@@ -6,6 +6,7 @@ import { Octokit } from '@octokit/rest';
 import Select from 'react-select';
 
 const octokit = new Octokit({ auth: import.meta.env.VITE_GITHUB_TOKEN });
+const GITHUB_ORG = import.meta.env.VITE_GITHUB_ORG || 'All-Hands-AI';
 
 interface PullRequest {
   title: string;
@@ -29,7 +30,7 @@ const PullRequestViewer: React.FC = () => {
     const fetchRepos = async () => {
       try {
         const response = await octokit.repos.listForOrg({
-          org: 'OpenDevin',
+          org: GITHUB_ORG,
           type: 'all',
         });
         const repoOptions = response.data.map(repo => ({
@@ -54,7 +55,7 @@ const PullRequestViewer: React.FC = () => {
 
           while (hasNextPage) {
             const response = await octokit.pulls.list({
-              owner: 'OpenDevin',
+              owner: GITHUB_ORG,
               repo: selectedRepo.value,
               state: 'open',
               per_page: 100,
