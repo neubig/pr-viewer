@@ -14,6 +14,9 @@ interface PullRequest {
   user: {
     login: string;
   };
+  created_at: string;
+  updated_at: string;
+  number: number;
 }
 
 interface Repo {
@@ -21,10 +24,26 @@ interface Repo {
   label: string;
 }
 
+interface SortOption {
+  value: keyof PullRequest | 'number' | 'created_at' | 'updated_at';
+  label: string;
+  direction: 'asc' | 'desc';
+}
+
+const sortOptions: SortOption[] = [
+  { value: 'created_at', label: 'Creation Date (Newest)', direction: 'desc' },
+  { value: 'created_at', label: 'Creation Date (Oldest)', direction: 'asc' },
+  { value: 'updated_at', label: 'Last Updated (Newest)', direction: 'desc' },
+  { value: 'updated_at', label: 'Last Updated (Oldest)', direction: 'asc' },
+  { value: 'number', label: 'PR Number (Highest)', direction: 'desc' },
+  { value: 'number', label: 'PR Number (Lowest)', direction: 'asc' },
+];
+
 const PullRequestViewer: React.FC = () => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
   const [pullRequests, setPullRequests] = useState<PullRequest[]>([]);
+  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOptions[0]);
 
   useEffect(() => {
     const fetchRepos = async () => {
@@ -80,25 +99,55 @@ const PullRequestViewer: React.FC = () => {
     fetchPullRequests();
   }, [selectedRepo]);
 
+  const sortPullRequests = (prs: PullRequest[]) => {
+    return [...prs].sort((a, b) => {
+      const aValue = a[selectedSort.value];
+      const bValue = b[selectedSort.value];
+      
+      if (selectedSort.direction === 'asc') {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return bValue < aValue ? -1 : bValue > aValue ? 1 : 0;
+      }
+    });
+  };
+
+  const sortedPullRequests = sortPullRequests(pullRequests);
+
   return (
     <div>
       <h1>Pull Request Viewer</h1>
-      <Select
-        options={repos}
-        value={selectedRepo}
-        onChange={(option) => setSelectedRepo(option as Repo)}
-        placeholder="Select a repository"
-        aria-label="Select a repository"
-      />
-      {pullRequests.length > 0 ? (
+      <div style={{ marginBottom: '1rem' }}>
+        <Select
+          options={repos}
+          value={selectedRepo}
+          onChange={(option) => setSelectedRepo(option as Repo)}
+          placeholder="Select a repository"
+          aria-label="Select a repository"
+        />
+      </div>
+      <div style={{ marginBottom: '1rem' }}>
+        <Select
+          options={sortOptions}
+          value={selectedSort}
+          onChange={(option) => setSelectedSort(option as SortOption)}
+          placeholder="Sort by"
+          aria-label="Sort pull requests"
+        />
+      </div>
+      {sortedPullRequests.length > 0 ? (
         <ul>
-          {pullRequests.map((pr) => (
+          {sortedPullRequests.map((pr) => (
             <li key={pr.html_url}>
               <a href={pr.html_url} target="_blank" rel="noopener noreferrer">
                 {pr.title}
               </a>
               {' by '}
               {pr.user.login}
+              {' - '}
+              Created: {new Date(pr.created_at).toLocaleDateString()}
+              {', '}
+              Last updated: {new Date(pr.updated_at).toLocaleDateString()}
             </li>
           ))}
         </ul>
