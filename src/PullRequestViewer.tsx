@@ -1,6 +1,5 @@
 
 
-
 import React, { useState, useEffect } from 'react';
 import { Octokit } from '@octokit/rest';
 import Select from 'react-select';
@@ -52,7 +51,7 @@ const PullRequestViewer: React.FC = () => {
           org: GITHUB_ORG,
           type: 'all',
         });
-        const repoOptions = response.data.map(repo => ({
+        const repoOptions = response.data.map((repo) => ({
           value: repo.name,
           label: repo.name,
         }));
@@ -68,7 +67,7 @@ const PullRequestViewer: React.FC = () => {
     const fetchPullRequests = async () => {
       if (selectedRepo) {
         try {
-          let allPullRequests: PullRequest[] = [];
+          const allPullRequests: PullRequest[] = [];
           let page = 1;
           let hasNextPage = true;
 
@@ -78,10 +77,10 @@ const PullRequestViewer: React.FC = () => {
               repo: selectedRepo.value,
               state: 'open',
               per_page: 100,
-              page: page,
+              page,
             });
 
-            allPullRequests = [...allPullRequests, ...response.data];
+            allPullRequests.push(...response.data);
 
             if (response.data.length < 100) {
               hasNextPage = false;
